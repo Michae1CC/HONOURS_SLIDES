@@ -1,0 +1,53 @@
+\documentclass[10pt,hyperref={pdfpagelabels=false},xcolor=table]{beamer}
+\usepackage{multicol}
+
+% Contact information: 
+%   Jorge M. Cruz-Duarte (jorge.cruz@tec.mx)
+%   Nov. 29, 2019
+
+\input{tecbeamer.tex}
+
+\title{Optimizing Gaussian Processes}  
+\author[Michael Ciccotosto-Camp]{{\bf Honours Research Project}} 
+%\institute{}
+\date{
+Michael Ciccotosto-Camp - 44302913 \\
+}
+
+\begin{document}
+
+\maketitle
+
+\section{Problem Significance}
+
+\begin{frame}
+    \frametitle{Problem Setting and Motivation}
+    \begin{itemize}
+        \item This project focuses on the problem of time series prediction.
+        \item Given a data set of $n$ observations $\mathcal{D} = \left\{ \left( x_i , y_i \right) \right\}_{i=1}^{n}$, where each input $x_i \in \mathbb{R}_{>0}$ is a time value and $y_i \in \mathbb{R}$ is a output or experimental observation that acts a function of time, the goal of time series prediction is to try and best predict a value $y_{\star}$ at time $x_{\star}$.
+        \item The idea of studying time series prediction came from a research group from the Gatton campus, lead by Andries Potgieter, analysing crop growth from previous seasons to forecast when certain phenological stages will take place in the current harvest.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.18]{img/yan_wheat_GPR_plot.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \begin{figure}
+        \centering
+        \frametitle{Infrared Spectroscopy and Mass Spectrum Data}
+        \includegraphics[scale=0.35]{aspirin_IR}
+        \includegraphics[scale=0.35]{MS _data_aspirin}
+    \end{figure}
+    \begin{itemize}
+        \item \textbf{Project Goal:} Develop a deep learning model to accurately predict functional groups based off Infrared (IR) and Mass Spectrometry (MS) data \footfullcite{NIST}. Main focus will be on Multi-layer Perceptrons (MLPs).
+    \end{itemize}
+
+\end{frame}
+
+
+
+
+\end{document}
+
