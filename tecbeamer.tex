@@ -1,7 +1,12 @@
-\usepackage{lmodern, ragged2e, CJKutf8, booktabs, subfigure, graphicx, algorithm, algorithmicx, algpseudocode, amsmath, amssymb, amsthm, amsfonts, mathtools, multirow,wrapfig,lipsum}
+\usepackage{lmodern, ragged2e, CJKutf8, booktabs, subfigure, graphicx, amsmath, amssymb, amsthm, amsfonts, mathtools, multirow,wrapfig,lipsum}
 \usepackage[style=phys]{biblatex}
+\usepackage[lined,boxed,vlined,ruled,linesnumbered]{algorithm2e}
+\SetKw{Continue}{continue}
+\SetKw{Or}{or}
+\SetKw{Until}{until}
 \addbibresource{bibliography.bib}
 \renewcommand{\footnotesize}{\tiny}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \makeatletter
 \@newctr{footnote}[page]
 \makeatother
