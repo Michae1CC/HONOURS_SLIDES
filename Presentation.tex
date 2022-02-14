@@ -38,7 +38,7 @@ Michael Ciccotosto-Camp - 44302913 \\
 \begin{frame}
     \frametitle{Introduction to Gaussian Processes}
     \begin{itemize}
-        \item Originally, Potgieter's team surveyed a number of different parameteric models to carry out forecasting. However, the parameteric models we serverely limited in their ability to inform when key phenological stages would take place. After seeing the success of applying GPs to other remote senesing tasks investigated the use of GPs in their own research to find that they could produce much higher resolution predictions from which they could infer a far richer phenological timeline.
+        \item Originally, Potgieter's team surveyed a number of different parameteric models to carry out forecasting. However, the parameteric models we serverely limited in their ability to inform when key phenological stages would take place. After seeing the success of applying GPs to other remote sensing tasks, the team investigated the use of GPs in their own research to find that they could produce much higher resolution predictions from which they could infer a far richer phenological timeline.
         \item A Gaussian Process (GP) is a collection of random variables with index set $I$, such that every finite subset of random variables has a joint Gaussian distribution.
         \item A GP is completely characterized by a mean function $m : X \to \mathbb{R}$ and a kernel $k : X \times X \to \mathbb{R}$.
     \end{itemize}
@@ -54,7 +54,7 @@ Michael Ciccotosto-Camp - 44302913 \\
 \begin{frame}
     \frametitle{Predictions}
     \begin{itemize}
-        \item The aim of GPs is to find a suitable mean function, $m$, for which we can then predict inputs from outside the observed values, $\bm{X_{\star}}$. This requires an understand of the function $f$.
+        \item The aim of GPs is to find a suitable mean function, $m$, for which we can then predict inputs from outside the observed values, $\bm{X_{\star}}$. This requires an understanding of the function $f$.
         \item Adopting the notation $\left( \bm{K}_{\bm{W} \bm{W}'} \right)_{i,j} \triangleq k \left( \bm{w}_i , \bm{w}_j' \right)$, when attempting to model our value function we usually do not have access to the value function itself but a noisy version thereof, $y = f(\bm{x}) + \varepsilon$ where $\varepsilon \sim \mathbb{N} (0, \sigma_n^2)$ meaning the prior on the noisy values becomes $\operatorname{cov} (\bm{y}) = \bm{K_{XX}} + \sigma_n^2 \bm{I}$.
         \item Using the assumption that our data can be modelled as a Gaussian process, we can write out the new distribution of the observed noisy values along the points at which we wish to test the underlying function as
               \[
@@ -171,16 +171,95 @@ Michael Ciccotosto-Camp - 44302913 \\
 \end{frame}
 
 \begin{frame}
+    \begin{itemize}
+        \item The integral $k \left( \bm{x} - \bm{y} \right) = \int_{\mathbb{C}^d} \exp \left( i \langle \bm{\omega} , \bm{x} - \bm{y} \rangle \right) \mu_k \left( d \bm{\omega} \right)$ can then be approximated via the following Monte Carlo estimate
+              \begin{align*}
+                  k \left( \bm{x} - \bm{y} \right)
+                   & = \int_{\mathbb{C}^d} \exp \left( i \langle \bm{\omega} , \bm{x} - \bm{y} \rangle \right) p (\bm{\omega}) \; d \bm{\omega}                                                                                                     \\
+                   & = \mathbb{E}_{\bm{\omega} \sim p (\cdot)} \left( \exp \left( i \langle \bm{\omega} , \bm{x} - \bm{y} \rangle \right) \right)                                                                                                   \\
+                   & \simeq \frac{1}{D} \sum_{j=1}^{D} \exp \left( i \langle \bm{\omega}_{j} , \bm{x} - \bm{y} \rangle \right)                                                                                                                      \\
+                   & = \sum_{j=1}^{D} \left( \frac{1}{\sqrt{D}} \exp \left( i \langle \bm{\omega}_{j} , \bm{x} \rangle \right) \right) \overline{\left( \frac{1}{\sqrt{D}} \exp \left( i \langle \bm{\omega}_{j} , \bm{y} \rangle \right) \right) } \\
+                   & = \langle \varphi (\bm{x}) , \varphi (\bm{y}) \rangle_{\mathbb{C}^D}
+              \end{align*}
+              where $\bm{\omega}_i \stackrel{\text{iid}}{\sim} p(\cdot)$ using the feature map
+              \begin{equation*}
+                  \varphi (\bm{x}) = \frac{1}{\sqrt{D}} \left[ z \left( \bm{\omega}_1, \bm{x} \right), z \left( \bm{\omega}_2, \bm{x} \right), \ldots , z \left( \bm{\omega}_D, \bm{x} \right) \right]^{\intercal}
+              \end{equation*}
+              where for convenience of notation $z \left( \bm{\omega}, \bm{x} \right) = \exp \left( i \langle \bm{\omega} , \bm{x} \rangle \right)$.
+    \end{itemize}
+\end{frame}
+
+\section{Results}
+
+\begin{frame}
     \begin{figure}
         \centering
-        \frametitle{Infrared Spectroscopy and Mass Spectrum Data}
-        \includegraphics[scale=0.35]{aspirin_IR}
-        \includegraphics[scale=0.35]{MS _data_aspirin}
+        \subfloat[3D-Spatial network]{
+            \begin{adjustbox}{width=0.31\textwidth}
+                \includegraphics[scale=1]{img/results/nys-sigma=0.1-k=80.png}
+            \end{adjustbox}
+        }
+        \subfloat[Abalone]{
+            \begin{adjustbox}{width=0.31\textwidth}
+                \includegraphics[scale=1]{img/results/nys-sigma=1.0-k=20.png}
+            \end{adjustbox}
+        }
+        \subfloat[Temperature]{
+            \begin{adjustbox}{width=0.31\textwidth}
+                \includegraphics[scale=1]{img/results/nys-sigma=2-k=80.png}
+            \end{adjustbox}
+        }
+        \caption{Comparison of Nystrom methods for various datasets.}
     \end{figure}
+    \begin{figure}
+        \centering
+        \subfloat[3D-Spatial network]{
+            \begin{adjustbox}{width=0.31\textwidth}
+                \includegraphics[scale=1]{img/results/rff-sigma=0.1.png}
+            \end{adjustbox}
+        }
+        \subfloat[Abalone]{
+            \begin{adjustbox}{width=0.31\textwidth}
+                \includegraphics[scale=1]{img/results/rff-sigma=10.0.png}
+            \end{adjustbox}
+        }
+        \subfloat[Wine]{
+            \begin{adjustbox}{width=0.31\textwidth}
+                \includegraphics[scale=1]{img/results/rff-sigma=2.1.png}
+            \end{adjustbox}
+        }
+        \caption{Comparison of RFF methods for various datasets.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \begin{figure}
+        \centering
+        \subfloat[Relative error]{
+            \begin{adjustbox}{width=0.45\textwidth}
+                \includegraphics[scale=1]{img/results/cmp_rel-sigma=0.1-k=80.png}
+            \end{adjustbox}
+        }
+        \subfloat[Absolute error]{
+            \begin{adjustbox}{width=0.45\textwidth}
+                \includegraphics[scale=1]{img/results/cmp_abs-sigma=0.1-k=80.png}
+            \end{adjustbox}
+        }
+        \caption{Comparison between Nystrom and RFF approximations for the 3D-Spatial network data.}
+    \end{figure}
+\end{frame}
+
+\section{Moving Forward}
+
+\begin{frame}
+    \frametitle{Moving Forward}
     \begin{itemize}
-        \item \textbf{Project Goal:} Develop a deep learning model to accurately predict functional groups based off Infrared (IR) and Mass Spectrometry (MS) data \footfullcite{NIST}. Main focus will be on Multi-layer Perceptrons (MLPs).
+        \item We saw that the Nystrom technique is better at producing approximations of the Gram matrix, $\bm{K}_{\bm{XX}}$, with smaller {\it relative errors} while the RFF technique is better at producing approximations with smaller {\it absolute errors}.
+        \item The question reamins which is better for GP prediction, lower relative error or absolute error (or perhaps some combination of the two)? This will ultimately determined which of the two techniques are more useful in Machine Learning applications.
+        \item Recall, the other bottle neck in the GPR algorithm was the Cholesky decomposition.
+        \item This can be avoided by employing faster linear system solvers. The two solvers we are interested in are the {\it Conjugate Gradient} (CG) and {\it Minimum Residual} (MINRES) methods used for solving positive semi-definite and symmeteric indefinite systems respectively.
+        \item While MINRES can be applied to a wider class of linear systems, in certain scenarios it may perform better than the more widely used CG method. It will be interesting to see which of the two produced better predictions in the context of GPs.
     \end{itemize}
 \end{frame}
 
 \end{document}
-
