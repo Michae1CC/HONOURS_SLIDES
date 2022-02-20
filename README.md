@@ -14,11 +14,14 @@
 ### Introduction to Gaussian Processes
 
 - A Gaussian Process (GP) is a collection of random variables with index set $I$, such that every finite subset of random variables has a joint Gaussian distribution and are completely characterized by a mean function $m : X \to \mathbb{R}$ and a kernel $k : X \times X \to \mathbb{R}$.
+- The aim of GPs is to find a suitable mean function, $m$, for which we can then predict inputs from outside the observed values, $\bm{X_{\star}}$. This requires an understanding of the function $f$.
 
 ### Predictions
 
-- The aim of GPs is to find a suitable mean function, $m$, for which we can then predict inputs from outside the observed values, $\bm{X_{\star}}$. This requires an understanding of the function $f$.
-- Adopting the notation $\left( \bm{K}_{\bm{W} \bm{W}'} \right)_{i,j} \triangleq k \left( \bm{w}_i , \bm{w}_j' \right)$, when attempting to model our value function we usually do not have access to the value function itself but a noisy version thereof, $y = f(\bm{x}) + \varepsilon$ where $\varepsilon \sim \mathbb{N} (0, \sigma_n^2)$ meaning the prior on the noisy values becomes $\operatorname{cov} (\bm{y}) = \bm{K_{XX}} + \sigma_n^2 \bm{I}$.
+- Using the assumption that our data can be modelled as a GP, we can model the relationship between the observed and unobserved values as a multivariate normal distribution.
+- This distribution here represents the prior distribution, before we have made any observations which is why a mean of zero is used. We construct the covariance matrix by taking pair wise kernel evaluations between inputs of both the observed and unobserved values.
+- Within and Machine Learning task, we don't usually have access exact values of the underpinning function we are try to model (in this case f) but a noisy version thereof. We account for this within our GP model by adding noise to the diagonal elements of the covariance matrix that hold only covariance for the data elements.
+- Using some well known multi-variate Gaussian distribution theory, we can compute a posterior to obtain an expression for both the mean and covariance for the values we would like to predict once observations have been made.
 
 ### Unoptimized GPR
 
@@ -29,8 +32,7 @@
 - One technique to speed up the computation of $\bm{K_{XX}}$ is to use a Nystrom approximation.
 - The Nystrom method we seek a matrix $\bm{Q}\in \mathbb{R}^{n \times k}$ that satisfies ${|| \bm{A} - \bm{Q} \bm{Q}^{\ast} \bm{A} ||}_{F} \leq \varepsilon$, where $\bm{A} \in \mathbb{R}^{n \times n}$ is positive semi definite matrix, to form the rank$-k$ approximation _show approximation_.
 - A matrix $\bm{Q}$ that satisfies the above conditions can be built using through a very popular column sampling technique.
-- As the name suggests, the matrix $\bm{Q}$ essentially samples and rescales columns from $\bm{A}$ using a probability distribution across the columns of $\bm{A}$.
-- When $\bm{Q}$ is constructed in this manner, it is usually referred to as a sketching matrix and denoted $\bm{S}$.
+- As the name suggests, the matrix $\bm{Q}$ essentially samples and rescales columns from $\bm{A}$ using a probability distribution across the columns of $\bm{A}$ so that when the column space of $\bm{Q}$ is projected onto $\bm{A}$, which is essentially what the Nystrom method is doing in an efficient manner, we end up with a good rank-k approximation of $\bm{A}$
 
 ## RFF
 - The other technique investigated to speed up the computation of $\bm{K_{XX}}$ is the Random Fourier Feature (RFF) approximation.
