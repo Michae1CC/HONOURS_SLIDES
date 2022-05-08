@@ -23,7 +23,7 @@ Michael Ciccotosto-Camp - 44302913 \\
 \begin{frame}
     \frametitle{Problem Setting and Motivation}
     \begin{itemize}
-        \item The idea of studying time series prediction came from a research group from the Gatton campus, lead by Andries Potgieter, analysing crop growth from previous seasons to forecast when certain phenological stages will take place in the current harvest.
+        \item The idea of studying time series prediction came from a research group from the Gatton campus, lead by Dr Potgieter, analysing crop growth from previous seasons to forecast when certain phenological stages will take place in the current harvest.
     \end{itemize}
     \begin{figure}
         \centering
@@ -51,7 +51,7 @@ Michael Ciccotosto-Camp - 44302913 \\
               \[
                   \begin{bmatrix}
                       \bm{y} \\
-                      \bm{f}_{\star}
+                      \bm{y}_{\star}
                   \end{bmatrix}
                   \sim \mathbb{N}
                   \begin{pmatrix}
@@ -64,11 +64,12 @@ Michael Ciccotosto-Camp - 44302913 \\
                           }
                   \end{pmatrix}.
               \]
+              (using the notation $\left( \bm{K}_{\bm{W} \bm{W}'} \right)_{i,j} \triangleq k \left( \bm{w}_i , \bm{w}_j' \right)$)
               \pause
         \item The mean and covariance can then be computed as
               \begin{align*}
-                  \overline{\bm{f}_{\star}}           & = \bm{K_{X_{\star}X}} \left[ \bm{K_{XX}} + \sigma_n^2 \mathbb{I}_{n \times n} \right]^{-1} \bm{y}                                                         \\
-                  \operatorname{cov} (\bm{f}_{\star}) & = \bm{K_{X_{\star}X_{\star}}} - \bm{K_{X_{\star}X}} \left[ \bm{K_{XX}} + \sigma_n^2 \mathbb{I}_{n \times n} \right]^{-1} \bm{K_{X_{\star}X}}^{\intercal}.
+                  \overline{\bm{y}_{\star}}           & = \bm{K_{X_{\star}X}} \left[ \bm{K_{XX}} + \sigma_n^2 \mathbb{I}_{n \times n} \right]^{-1} \bm{y}                                                         \\
+                  \operatorname{cov} (\bm{y}_{\star}) & = \bm{K_{X_{\star}X_{\star}}} - \bm{K_{X_{\star}X}} \left[ \bm{K_{XX}} + \sigma_n^2 \mathbb{I}_{n \times n} \right]^{-1} \bm{K_{X_{\star}X}}^{\intercal}.
               \end{align*}
     \end{itemize}
 \end{frame}
@@ -88,9 +89,9 @@ Michael Ciccotosto-Camp - 44302913 \\
                 \BlankLine
                 $\bm{L} = \operatorname{cholesky} \left( \bm{K_{XX}} + \sigma_n^2 \mathbb{I}_{n \times n} \right)$\;
                 $\bm{\alpha} = \operatorname{lin-solve} \left( \bm{L}^{\intercal} , \operatorname{lin-solve} \left( \bm{L}, \bm{y} \right) \right)$\;
-                $\overline{f_{\star}} = \bm{K_{X_{\star} X}} \bm{\alpha}$\;
-                $\bm{v} = \operatorname{lin-solve} \left( \bm{L}, \bm{K_{X_{\star} X}} \right)$\;
-                $\mathbb{V} \left[ f_{\star} \right] = \bm{K_{X_{\star} X_{\star}}} - \bm{v}^{\intercal} \bm{v}$\;
+                $\overline{y_{\star}} = \bm{K_{x_{\star} X}} \bm{\alpha}$\;
+                $\bm{v} = \operatorname{lin-solve} \left( \bm{L}, \bm{K_{x_{\star} X}} \right)$\;
+                $\mathbb{V} \left[ f_{\star} \right] = \bm{K_{x_{\star} x_{\star}}} - \bm{v}^{\intercal} \bm{v}$\;
                 \Return{$\overline{f_{\star}} , \mathbb{V} \left[ f_{\star} \right]$}
                 \BlankLine
             \end{algorithm}
@@ -109,14 +110,14 @@ Michael Ciccotosto-Camp - 44302913 \\
                 \DontPrintSemicolon
                 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 
-                \Input{Observations $\bm{X}, \bm{y}$ and a prediction inputs $\bm{X}_{\star}$.}
+                \Input{Observations $\bm{X}, \bm{y}$ and a prediction inputs $\bm{x}_{\star}$.}
                 \Output{A prediction $\overline{f_{\star}} $ with its corresponding variance $ \mathbb{V} \left[ f_{\star} \right]$.}
                 \BlankLine
                 \textcolor{red}{$\bm{L} = \operatorname{cholesky} \left( \bm{K_{XX}} + \sigma_n^2 \mathbb{I}_{n \times n} \right)$}\;
                 \textcolor{red}{$\bm{\alpha} = \operatorname{lin-solve} \left( \bm{L}^{\intercal} , \operatorname{lin-solve} \left( \bm{L}, \bm{y} \right) \right)$}\;
-                $\overline{f_{\star}} = \bm{K_{X_{\star} X}} \bm{\alpha}$\;
-                \textcolor{red}{$\bm{v} = \operatorname{lin-solve} \left( \bm{L}, \bm{K_{X_{\star} X}} \right)$}\;
-                $\mathbb{V} \left[ f_{\star} \right] = \bm{K_{X_{\star} X_{\star}}} - \bm{v}^{\intercal} \bm{v}$\;
+                $\overline{f_{\star}} = \bm{K_{x_{\star} X}} \bm{\alpha}$\;
+                \textcolor{red}{$\bm{v} = \operatorname{lin-solve} \left( \bm{L}, \bm{K_{x_{\star} X}} \right)$}\;
+                $\mathbb{V} \left[ f_{\star} \right] = \bm{K_{x_{\star} x_{\star}}} - \bm{v}^{\intercal} \bm{v}$\;
                 \Return{$\overline{f_{\star}} , \mathbb{V} \left[ f_{\star} \right]$}
                 \BlankLine
             \end{algorithm}
@@ -151,7 +152,7 @@ Michael Ciccotosto-Camp - 44302913 \\
     \begin{itemize}
         \item The RFF technique hinges on Bochners theorem which characterises positive definite functions (namely kernels) and states that any positive definite functions can be represented as
               \[
-                  k \left( \bm{x} - \bm{y} \right) = k \left( \bm{x} - \bm{y} \right) = \int_{\mathbb{C}^d} \exp \left( i \langle \bm{\omega} , \bm{x} - \bm{y} \rangle \right) \mu_k \left( d \bm{\omega} \right)
+                  k \left( \bm{x}, \bm{y} \right) = k \left( \bm{x} - \bm{y} \right) = \int_{\mathbb{C}^d} \exp \left( i \langle \bm{\omega} , \bm{x} - \bm{y} \rangle \right) \mu_k \left( d \bm{\omega} \right)
               \]
               where $\mu_k$ is a positive finite measure on the frequencies of $\bm{\omega}$.
               \pause
@@ -165,6 +166,21 @@ Michael Ciccotosto-Camp - 44302913 \\
                   \onslide<5->{ & = \sum_{j=1}^{D} \left( \frac{1}{\sqrt{D}} \exp \left( i \langle \bm{\omega}_{j} , \bm{x} \rangle \right) \right) \overline{\left( \frac{1}{\sqrt{D}} \exp \left( i \langle \bm{\omega}_{j} , \bm{y} \rangle \right) \right) } \\}
                   \onslide<6->{ & = \langle \varphi (\bm{x}) , \varphi (\bm{y}) \rangle_{\mathbb{C}^D}}
               \end{align*}
+    \end{itemize}
+\end{frame}
+
+\section{Krylov Subspace Methods}
+
+\begin{frame}
+    \frametitle{Krylov Subspace Methods}
+    \begin{itemize}
+        \item We would like to solve the linear system $\bm{A} \bm{x^{\star}} = \bm{b}$, how do we do this in an efficient and iterative manner?
+              \pause
+        \item It is easy enough to show that $\bm{x^{\star}} \in \bm{x}_0 + \mathcal{K}_{n} \left( \bm{A},\bm{v} \right)$ where $x_0$ is a starting guess for a solution and $\mathcal{K}_{k} \left( \bm{A},\bm{v} \right) = \operatorname{l.s} \left\{ \bm{r}_0, \bm{A} \bm{r}_0, \bm{A}^2 \bm{r}_0, \ldots , \bm{A}^{k-1} \bm{r}_0 \right\}$.
+              \pause
+        \item The conjugate gradient method imposes additional constraints, so that $\bm{x}_k \in \bm{x}_0 + \mathcal{K}_k$ is select to minimize $\| \bm{r}_{k} \|_{\bm{A}^{-1}}$, where $\bm{r}_{k} = \bm{b} - \bm{A} \bm{x}_k$ and $\| \bm{z} \|_{\bm{A}} = \left( \bm{z}^{\intercal} \bm{A} \bm{z} \right)^{\frac{1}{2}}$, is the energy norm with respect to $\bm{A}$.
+              \pause
+        \item The MINRES method imposes slight different constraints, so that $\bm{x}_k \in \bm{x}_0 + \mathcal{K}_k$ is select to instead minimize $\norm{\bm{A} \bm {x}_k - \bm{b}}_2$.
     \end{itemize}
 \end{frame}
 
@@ -185,7 +201,7 @@ Michael Ciccotosto-Camp - 44302913 \\
         }
         \subfloat[Temperature]{
             \begin{adjustbox}{width=0.31\textwidth}
-                \includegraphics[scale=1]{img/results/nys-sigma=2-k=80.png}
+                \includegraphics[scale=1]{img/results/nys-sigma=1.0-k=80.png}
             \end{adjustbox}
         }
         \caption{Comparison of Nystrom methods for various datasets.}
@@ -214,17 +230,57 @@ Michael Ciccotosto-Camp - 44302913 \\
 \begin{frame}
     \begin{figure}
         \centering
-        \subfloat[Relative error]{
+        \subfloat[Frobenius error]{
             \begin{adjustbox}{width=0.45\textwidth}
                 \includegraphics[scale=1]{img/results/cmp_rel-sigma=0.1-k=80.png}
             \end{adjustbox}
         }
-        \subfloat[Absolute error]{
+        \subfloat[Infinity error]{
             \begin{adjustbox}{width=0.45\textwidth}
-                \includegraphics[scale=1]{img/results/cmp_abs-sigma=0.1-k=80.png}
+                \includegraphics[scale=1]{img/results/cmp_inf-sigma=0.1-k=80.png}
             \end{adjustbox}
         }
         \caption{Comparison between Nystrom and RFF approximations for the 3D-Spatial network data.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \begin{itemize}
+        \item How do Nystrom and RFF methods compare in terms of prediction?
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \subfloat[Stock Market dataset]{
+            \begin{adjustbox}{width=0.45\textwidth}
+                \includegraphics[scale=1]{img/pred/stock_market/pred_acc/kern_cmp-sigma=10.0.png}
+            \end{adjustbox}
+        }
+        \subfloat[Temperature dataset]{
+            \begin{adjustbox}{width=0.45\textwidth}
+                \includegraphics[scale=1]{img/pred/temperature_data/pred_acc/kern_cmp-sigma=10.0.png}
+            \end{adjustbox}
+        }
+        \caption{Comparison between Nystrom and RFF approximations in GP prediction.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \begin{itemize}
+        \item How do MINRES and CG methods compare in terms of prediction?
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \subfloat[Abalone dataset]{
+            \begin{adjustbox}{width=0.45\textwidth}
+                \includegraphics[scale=1]{img/pred/abalone/pred_acc/lin_cmp-sigma=1.0.png}
+            \end{adjustbox}
+        }
+        \subfloat[Quadratic dataset]{
+            \begin{adjustbox}{width=0.45\textwidth}
+                \includegraphics[scale=1]{img/pred/rastrigin/pred_acc/lin_cmp-sigma=2.1.png}
+            \end{adjustbox}
+        }
+        \caption{Comparison between MINRES and CG in GP prediction.}
     \end{figure}
 \end{frame}
 
@@ -233,8 +289,7 @@ Michael Ciccotosto-Camp - 44302913 \\
 \begin{frame}
     \frametitle{Moving Forward}
     \begin{itemize}
-        \item We saw that the Nystrom technique is better at producing approximations of the Gram matrix, $\bm{K}_{\bm{XX}}$, with smaller {\it relative Frobenius errors} while the RFF technique is better at producing approximations with smaller {\it relative absolute errors}. Which is better for GP prediction?
-        \item Recall, the other bottle neck in the GPR algorithm was the Cholesky decomposition. We can employ faster linear system solvers, namely the {\it Conjugate Gradient} (CG) and {\it Minimum Residual} (MINRES) method.
+        \item Look at multi-output Gaussian Processes for remote sensing.
     \end{itemize}
 \end{frame}
 
