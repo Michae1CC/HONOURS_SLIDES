@@ -142,6 +142,8 @@ Michael Ciccotosto-Camp - 44302913 \\
                   \onslide<4->{       & = \bm{Q} \left( \bm{Q}^{\ast} \bm{A} \bm{Q} \right) \left( \bm{Q}^{\ast} \bm{A} \bm{Q} \right)^{\dagger} \left( \bm{Q}^{\ast} \bm{A} \bm{Q} \right) \bm{Q}^{\ast} \\}
                   \onslide<5->{       & \simeq \left( \bm{A} \bm{Q} \right) \left( \bm{Q}^{\ast} \bm{A} \bm{Q} \right)^{\dagger} \left( \bm{Q}^{\ast} \bm{A} \right).}
               \end{align*}
+              \onslide<6->
+              % \item This tells us that $\bm{K_{XX}}$ can be computed as $\bm{K_{XX}} \simeq \bm{K}_{(:,I)} \bm{K}_{(I,I)} \bm{K}_{(:,I)}^{\intercal}$ (up to a rescaling of entries) where $I$ is a randomly sampled subset of column indices.
     \end{itemize}
 \end{frame}
 
@@ -174,13 +176,13 @@ Michael Ciccotosto-Camp - 44302913 \\
 \begin{frame}
     \frametitle{Krylov Subspace Methods}
     \begin{itemize}
-        \item We would like to solve the linear system $\bm{A} \bm{x^{\star}} = \bm{b}$, how do we do this in an efficient and iterative manner?
+        \item $\bm{A} \bm{x^{\star}} = \bm{b}$.
               \pause
-        \item It is easy enough to show that $\bm{x^{\star}} \in \bm{x}_0 + \mathcal{K}_{n} \left( \bm{A},\bm{v} \right)$ where $x_0$ is a starting guess for a solution and $\mathcal{K}_{k} \left( \bm{A},\bm{v} \right) = \operatorname{l.s} \left\{ \bm{r}_0, \bm{A} \bm{r}_0, \bm{A}^2 \bm{r}_0, \ldots , \bm{A}^{k-1} \bm{r}_0 \right\}$.
+        \item $\bm{x^{\star}} \in \bm{x}_0 + \mathcal{K}_{n} \left( \bm{A},\bm{v} \right)$ where  $\mathcal{K}_{k} \left( \bm{A},\bm{v} \right) = \operatorname{l.s} \left\{ \bm{r}_0, \bm{A} \bm{r}_0, \bm{A}^2 \bm{r}_0, \ldots , \bm{A}^{k-1} \bm{r}_0 \right\}$.
               \pause
-        \item The conjugate gradient method imposes additional constraints, so that $\bm{x}_k \in \bm{x}_0 + \mathcal{K}_k$ is select to minimize $\| \bm{r}_{k} \|_{\bm{A}^{-1}}$, where $\bm{r}_{k} = \bm{b} - \bm{A} \bm{x}_k$ and $\| \bm{z} \|_{\bm{A}} = \left( \bm{z}^{\intercal} \bm{A} \bm{z} \right)^{\frac{1}{2}}$, is the energy norm with respect to $\bm{A}$.
+        \item CG: $\| \bm{x} - \bm{x}^{\star} \|_{\bm{A}}$ is minimized.
               \pause
-        \item The MINRES method imposes slight different constraints, so that $\bm{x}_k \in \bm{x}_0 + \mathcal{K}_k$ is select to instead minimize $\norm{\bm{A} \bm {x}_k - \bm{b}}_2$.
+        \item MINRES: $\norm{\bm{A} \bm {x} - \bm{b}}_2$ is minimized.
     \end{itemize}
 \end{frame}
 
@@ -189,43 +191,75 @@ Michael Ciccotosto-Camp - 44302913 \\
 \begin{frame}
     \begin{figure}
         \centering
-        \subfloat[3D-Spatial network]{
-            \begin{adjustbox}{width=0.31\textwidth}
-                \includegraphics[scale=1]{img/results/nys-sigma=0.1-k=80.png}
-            \end{adjustbox}
-        }
-        \subfloat[Abalone]{
-            \begin{adjustbox}{width=0.31\textwidth}
-                \includegraphics[scale=1]{img/results/nys-sigma=1.0-k=20.png}
-            \end{adjustbox}
-        }
-        \subfloat[Temperature]{
-            \begin{adjustbox}{width=0.31\textwidth}
-                \includegraphics[scale=1]{img/results/nys-sigma=1.0-k=80.png}
-            \end{adjustbox}
-        }
-        \caption{Comparison of Nystrom methods for various datasets.}
-    \end{figure}
-    \begin{figure}
-        \centering
-        \subfloat[3D-Spatial network]{
-            \begin{adjustbox}{width=0.31\textwidth}
-                \includegraphics[scale=1]{img/results/rff-sigma=0.1.png}
-            \end{adjustbox}
-        }
-        \subfloat[Abalone]{
-            \begin{adjustbox}{width=0.31\textwidth}
-                \includegraphics[scale=1]{img/results/rff-sigma=10.0.png}
-            \end{adjustbox}
-        }
-        \subfloat[Wine]{
-            \begin{adjustbox}{width=0.31\textwidth}
-                \includegraphics[scale=1]{img/results/rff-sigma=2.1.png}
-            \end{adjustbox}
-        }
-        \caption{Comparison of RFF methods for various datasets.}
+        \includegraphics[scale=0.4]{img/results/nys-sigma=0.1-k=80.png}
+        \caption{3D-Spatial Network dataset using Nystrom}
     \end{figure}
 \end{frame}
+
+\begin{frame}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.4]{img/results/nys-sigma=1.0-k=20.png}
+        \caption{Abalone dataset using Nystrom}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.4]{img/results/nys-sigma=1.0-k=80.png}
+        \caption{Temperature dataset using Nystrom}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.4]{img/results/rff-sigma=0.1.png}
+        \caption{3D-Spatial Network dataset using RFF}
+    \end{figure}
+\end{frame}
+
+% \begin{frame}
+%     \begin{figure}
+%         \centering
+%         \subfloat[3D-Spatial Network]{
+%             \begin{adjustbox}{width=0.31\textwidth}
+%                 \includegraphics[scale=1]{img/results/nys-sigma=0.1-k=80.png}
+%             \end{adjustbox}
+%         }
+%         \subfloat[Abalone]{
+%             \begin{adjustbox}{width=0.31\textwidth}
+%                 \includegraphics[scale=1]{img/results/nys-sigma=1.0-k=20.png}
+%             \end{adjustbox}
+%         }
+%         \subfloat[Temperature]{
+%             \begin{adjustbox}{width=0.31\textwidth}
+%                 \includegraphics[scale=1]{img/results/nys-sigma=1.0-k=80.png}
+%             \end{adjustbox}
+%         }
+%         \caption{Comparison of Nystrom methods for various datasets.}
+%     \end{figure}
+%     \begin{figure}
+%         \centering
+%         \subfloat[3D-Spatial network]{
+%             \begin{adjustbox}{width=0.31\textwidth}
+%                 \includegraphics[scale=1]{img/results/rff-sigma=0.1.png}
+%             \end{adjustbox}
+%         }
+%         \subfloat[Abalone]{
+%             \begin{adjustbox}{width=0.31\textwidth}
+%                 \includegraphics[scale=1]{img/results/rff-sigma=10.0.png}
+%             \end{adjustbox}
+%         }
+%         \subfloat[Wine]{
+%             \begin{adjustbox}{width=0.31\textwidth}
+%                 \includegraphics[scale=1]{img/results/rff-sigma=2.1.png}
+%             \end{adjustbox}
+%         }
+%         \caption{Comparison of RFF methods for various datasets.}
+%     \end{figure}
+% \end{frame}
 
 \begin{frame}
     \begin{figure}
@@ -248,6 +282,7 @@ Michael Ciccotosto-Camp - 44302913 \\
     \begin{itemize}
         \item How do Nystrom and RFF methods compare in terms of prediction?
     \end{itemize}
+    \pause
     \begin{figure}
         \centering
         \subfloat[Stock Market dataset]{
@@ -284,11 +319,33 @@ Michael Ciccotosto-Camp - 44302913 \\
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \begin{itemize}
+        \item Using approximation techniques together.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \subfloat[Stock Market dataset]{
+            \begin{adjustbox}{width=0.45\textwidth}
+                \includegraphics[scale=1]{img/pred/3D_spatial_network/pred_acc/dual_cmp_both-sigma=1.0.png}
+            \end{adjustbox}
+        }
+        \subfloat[Abalone dataset]{
+            \begin{adjustbox}{width=0.45\textwidth}
+                \includegraphics[scale=1]{img/pred/abalone/pred_acc/dual_cmp_both-sigma=1.0.png}
+            \end{adjustbox}
+        }
+        \caption{Comparison between CG and MINRES when paried with RFF.}
+    \end{figure}
+\end{frame}
+
 \section{Moving Forward}
 
 \begin{frame}
     \frametitle{Moving Forward}
     \begin{itemize}
+        \item Write these results up.
+        \item Apply our findings to our initial remote sensing task.
         \item Look at multi-output Gaussian Processes for remote sensing.
     \end{itemize}
 \end{frame}
