@@ -31,6 +31,16 @@ Michael Ciccotosto-Camp - 44302913 \\
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \begin{itemize}
+        \item Photo courtesy of Dr Andries Potgieter and Yan Zhao.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.5]{img/yan_crop_id.png}
+    \end{figure}
+\end{frame}
+
 \section{Gaussian Processes}
 
 \begin{frame}
@@ -142,7 +152,6 @@ Michael Ciccotosto-Camp - 44302913 \\
                   \onslide<4->{       & = \bm{Q} \left( \bm{Q}^{\ast} \bm{A} \bm{Q} \right) \left( \bm{Q}^{\ast} \bm{A} \bm{Q} \right)^{\dagger} \left( \bm{Q}^{\ast} \bm{A} \bm{Q} \right) \bm{Q}^{\ast} \\}
                   \onslide<5->{       & \simeq \left( \bm{A} \bm{Q} \right) \left( \bm{Q}^{\ast} \bm{A} \bm{Q} \right)^{\dagger} \left( \bm{Q}^{\ast} \bm{A} \right).}
               \end{align*}
-              \onslide<6->
               % \item This tells us that $\bm{K_{XX}}$ can be computed as $\bm{K_{XX}} \simeq \bm{K}_{(:,I)} \bm{K}_{(I,I)} \bm{K}_{(:,I)}^{\intercal}$ (up to a rescaling of entries) where $I$ is a randomly sampled subset of column indices.
     \end{itemize}
 \end{frame}
@@ -178,10 +187,13 @@ Michael Ciccotosto-Camp - 44302913 \\
     \begin{itemize}
         \item $\bm{A} \bm{x^{\star}} = \bm{b}$.
               \pause
+              \bigskip
         \item $\bm{x^{\star}} \in \bm{x}_0 + \mathcal{K}_{n} \left( \bm{A},\bm{v} \right)$ where  $\mathcal{K}_{k} \left( \bm{A},\bm{v} \right) = \operatorname{l.s} \left\{ \bm{r}_0, \bm{A} \bm{r}_0, \bm{A}^2 \bm{r}_0, \ldots , \bm{A}^{k-1} \bm{r}_0 \right\}$.
               \pause
+              \bigskip
         \item CG: $\| \bm{x} - \bm{x}^{\star} \|_{\bm{A}}$ is minimized.
               \pause
+              \bigskip
         \item MINRES: $\norm{\bm{A} \bm {x} - \bm{b}}_2$ is minimized.
     \end{itemize}
 \end{frame}
@@ -339,13 +351,25 @@ Michael Ciccotosto-Camp - 44302913 \\
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \begin{itemize}
+        \item $\norm{\bm{K_{X_{\star} X}} \bm{\rho} - \bm{y}_{\star}}_2^2$, where $\bm{\rho}$ is our best estimate for $\left[ \bm{K_{XX}} + \sigma_n^2 \bm{1}_{n \times n} \right] \bm{\rho} = \bm{y}$
+              \bigskip
+              \bigskip
+              \pause
+        \item $\norm{\left[ \bm{K_{XX}} + \sigma_n^2 \bm{1}_{n \times n} \right] \bm{\rho} - \bm{y}}_2^2$
+    \end{itemize}
+\end{frame}
+
 \section{Moving Forward}
 
 \begin{frame}
     \frametitle{Moving Forward}
     \begin{itemize}
         \item Write these results up.
+              \bigskip
         \item Apply our findings to our initial remote sensing task.
+              \bigskip
         \item Look at multi-output Gaussian Processes for remote sensing.
     \end{itemize}
 \end{frame}
