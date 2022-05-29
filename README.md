@@ -9,8 +9,10 @@
 - The idea of studying time series prediction came from a research group from the Gatton campus, lead by Andries Potgieter, analysing crop growth from previous seasons to forecast when certain phenological stages will take place in the current harvest.
 - Originally, Potgieter's team surveyed a number of different parameteric models to forecast crop growth. However, the parameteric models we serverely limited in their ability to inform when key phenological stages would take place. After seeing the success of applying GPs to other remote sensing tasks, the team investigated the use of GPs in their own research to find that they could produce much higher resolution predictions from which they could infer a far richer phenological timeline.
 
-- The focus of my thesis was to study time series prediction, in particular gaussian processes. The idea to study this model came from one of the research groups down the Gatton on campus led by Dr Potgeiter who is analysing crop growth from previous seasons to forecast when certain phenological stages will take place in the current harvest.
+- The focus of my thesis was to study time series prediction, in particular we were taking a look at the gaussian processes models. The idea to study this model came from one of the research groups down the Gatton on campus within Queensland Alliance for Agriculture and Food Innovation led by A/Prof Potgeiter who is analysing crop growth from previous seasons to forecast when certain phenological stages will take place in the current harvest.
 - Originally, Potgieter's team surveyed a number of different parameteric models to forecast crop growth. However, the parameteric models we serverely limited in their ability to inform when key phenological stages would take place. After seeing the success of applying GPs to other remote sensing tasks, the team investigated the use of GPs in their own research to find that they could produce much higher resolution predictions from which they could infer a far richer phenological timeline.
+
+- Of course, Gaussian processes are not just limited to predicting crop yields. There is a pleathora of application for this model
 
 ## Gaussian Processes
 
@@ -20,6 +22,9 @@
 - The aim of GPs is to find a suitable mean function, $m$, for which we can then predict inputs from outside the observed values, $\bm{X_{\star}}$. This requires an understanding of the function $f$.
 
 - Okay, so what exactly are Gaussian Process? Well, just very briefly, Gaussian Process it's a collection of random variables, with some sort of index that when you take any finite subset of these random variables it forms a joint gaussian distribution. They can be completely characterized by a mean function $m : X \to \mathbb{R}$ and a kernel $k : X \times X \to \mathbb{R}$. The mean function is what we're going to be using to make predictions, and is what is going to be used to model the function underpinning our phenomina and this covariance or kernel function you can really think about as just providing some notion of similarity between points.
+
+- Just to make this idea a little more concrete, with is the kernel we used was the Radial Basis Function or Gaussian kernel, graphed here with two inputs
+- If there's no difference in elements between the two inputs the output peaks at 1 and exponentially decays as the inputs drift further apart.
 
 ### Predictions
 
@@ -37,6 +42,15 @@
 ### Unoptimized GPR
 
 - _Present Algorithm and highlight slow parts_
+
+## The Project
+
+- The main goal of this project was to look at how various approximation techniques could help improve the runtime of these bottlenecks, at the expense of a bit of accuracy.
+- For the kernel matrix construction we looked at replacing the exact kernel matrix compution with Nystrom and RFF estimations.
+- For the linear solve using the Cholesky decompositions we explored the use of two iterative Krylov subspace solvers, that being, the Conjugate gradient and Minimum residual method.
+- What exactly these methods we shall get to in just a moment.
+- What we did new here is, for kernel matrix construction, many people have looked at testing Nystrom and RFF methods in isolation but have never really done a direct comparison of them.
+- For the linear system solvers, while there have been many comparisons in terms of solution convergence and error between CG and MINRES, none of these comparisons have ever been studied within the context of Gaussian process and how their estimations influence the quality of our predictions
 
 ## Nystrom
 
@@ -61,8 +75,8 @@
 - The rationale behind these methods is that you slowly build up the order of your Krylov subspace with each iterate belonging to the next subspace and where additional constraints are employed to guide each estimate toward an exact solution.
 - Different assumptions on $\bm{A}$ and constraints leads to different flavours of Krylov subspace methods.
 - The particular Krylov subspace methods used in this thesis where the conjugate gradient (CG for short) and minimum residual methods (MINRES for short)
-- The CG method imposes additional constraints so that the energy norm is minimized against the $k^{th}$ iterate and assumes $\bm{A}$ is PSD
-- MINRES, on the other hand, imposes additional constraints so that Euclidean distance of $A x_k - b$ is minimized.
+- The CG method imposes additional constraints so that the energy norm is minimized against the $k^{th}$ iterate and assumes $\bm{A}$ is symmeteric and PD
+- MINRES, on the other hand, imposes additional constraints so that Euclidean distance of $A x_k - b$ is minimized and only requires $A$ to be symmeteric
 
 ## Nystrom
 
@@ -97,7 +111,7 @@
 - From what my supervisor and I could find, this is probably one of the most extensive experimental analysis conducted to determine which of methods delivered the best results, empirically speaking.
 - Some of the findings discovered in this thesis have, to our knowledge, not been reported elsewhere. As a result, we intend to publish these findings given their obvious appeal to the wider scientific computing community.
 - In terms of research, many of the datasets used in this thesis were far too small to observe the asymptotic benefits of using approximation methods. It would be interesting to determine how well these techniques scale on very large datasets. In particular, our discoveries are likely to benefit the agricultural sector as more data is collected over the forthcoming years to perform crop analysis on.
-- Another, direction future research could be taken is the application of the approximation techniques applied to multi-output or multi-task Gaussian process models. In many machine learning scenarios we may want to predict multiple outputs using the same set of inputs. As an example, remote sensing researchers attempt to predict the intensity of multiple bands of light reflecting off farm land to give an indication of crop growth. Different versions of the Gaussian processes algorithm exist to predict multiple outputs simultaneously; however, they also suffer from the same bottlenecks as single output Gaussian processes. It would be intriging to learn whether the approximation techniques studied in this thesis could potentially improve the prediction time of multi-task Gaussian Processes.
+- Another, direction future research could be taken is the application of the approximation techniques applied to multi-task Gaussian process models. In many machine learning scenarios we may want to predict multiple outputs using the same set of inputs. As an example, remote sensing researchers attempt to predict the intensity of multiple bands of light reflecting off farm land to give an indication of crop growth. Different versions of the Gaussian processes algorithm exist to predict multiple outputs simultaneously; however, they also suffer from the same bottlenecks as single output Gaussian processes. It would be intriging to learn whether the approximation techniques studied in this thesis could potentially improve the prediction time of multi-task Gaussian Processes.
 
 - The question reamins which is better for GP prediction, lower relative error or absolute error (or perhaps some combination of the two)? This will ultimately determined which of the two techniques are more useful in Machine Learning applications.
 - Recall, the other bottle neck in the GPR algorithm was the Cholesky decomposition.
